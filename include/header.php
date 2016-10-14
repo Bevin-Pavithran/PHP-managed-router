@@ -1,12 +1,12 @@
 <html>
 <head>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.12.0/css/patternfly.css" rel="stylesheet" media="screen, print">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" media="screen, print">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
 </head>
 <body>
+  <div class="container">
   <header>
     <nav class="navbar navbar-default navbar-pf" role="navigation">
       <div class="navbar-header">
