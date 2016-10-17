@@ -8,7 +8,7 @@ $routers = $api->search();
 ?>
  <div class="container-fluid">
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-xs-10">
         <form class="form-inline router-search">
           <div class="form-group" style="width: 50%;">
             <label class="sr-only" for="search-str">Search for Router</label>
@@ -17,7 +17,12 @@ $routers = $api->search();
           <button class="btn btn-default" id="searchRouter">Search</button>
         </form>
       </div>
-      <div class="col-md-12">
+      <div class="col-xs-2">
+        <div class="actions pull-right">
+          <a id="refreshRouter" href="#"><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+        </div>    
+      </div>
+      <div class="col-md-12" id="routerList">
         <table class="table">
           <thead>
             <tr><th>Customer</th><th>Serial Number</th><th>MAC</th><th>Make</th><th>Model</th><th>Manage</th></tr>
@@ -36,6 +41,24 @@ $routers = $api->search();
             echo $line;
             } ?>
           </tbody>
+          <tfoot>
+            <tr>
+              <td>
+                <input type="text" class="form-control" id="customer" placeholder="Name">
+              </td>
+              <td>
+                <input type="text" class="form-control" id="serial" placeholder="Serial Number RNV...">
+              </td>
+              <td>
+                <input type="text" class="form-control" id="mac" placeholder="MAC 0019F...">
+              </td>
+              <td></td>
+              <td></td>
+              <td>
+                <button id="addRouter" class="btn btn-default">Add</button>
+              </td>
+            </tr>    
+          </tfoot>
         </table>    
       </div>
     </div>    
@@ -47,21 +70,45 @@ $(document).ready(function () {
     $('#searchRouter').on('click', function(e){
       e.preventDefault();
       var searchStr = $('#search-str').val();
-      if(searchStr.length !== 0){
-        $.ajax({
-          method: "POST",
-          url: "ajax/searchForRouter.php",
-          data: {
-            param : searchStr
-          },
-          success: function() {
-                
-          }
-        });
-      } else {
-        return false;
-      }
+      getRouter(searchStr);
+    });
+    $('#refreshRouter').on('click', function(e){
+      $("#search-str").val('');
+      e.preventDefault();
+      getRouter();
+    });
+    $('#addRouter').on('click', function(e){
+      var customer = $('#customer').val();
+      var serial = $('#serial').val();
+      var mac = $('#mac').val();
+      
+      $.ajax({
+        method: "POST",
+        url: "ajax/addNewRouter.php",
+        data: {
+          customer : customer,
+          serial : serial,
+          mac : mac
+        },
+        success: function() {
+          
+        }
+      });
     });
 });
+
+function getRouter(param){
+  $.ajax({
+    method: "POST",
+    url: "ajax/searchForRouter.php",
+    data: {
+      param : param
+    },
+    success: function(searchResult) {
+      $('#routerList').html('');     
+      $('#routerList').html(searchResult);     
+    }
+  });
+}
 </script>
 <?php include('include/footer.php');?>
