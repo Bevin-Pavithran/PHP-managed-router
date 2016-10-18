@@ -4,10 +4,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/bevin/meteor_bench/PHP_managed_router/class/managed_router_api.php</file>
-            <file>file:/home/bevin/meteor_bench/PHP_managed_router/config/config.php</file>
             <file>file:/home/bevin/meteor_bench/PHP_managed_router/include/header.php</file>
             <file>file:/home/bevin/meteor_bench/PHP_managed_router/index.php</file>
-            <file>file:/home/bevin/meteor_bench/PHP_managed_router/include/standard.php</file>
+            <file>file:/home/bevin/meteor_bench/PHP_managed_router/ajax/searchForRouter.php</file>
         </group>
     </open-files>
 </project-private>

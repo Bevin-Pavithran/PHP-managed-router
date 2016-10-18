@@ -166,11 +166,7 @@ class ManagedRouterAPI {
 
 		$router = json_decode($result_string);
 		
-		if(is_array($router)){
-			return $router;
-		} else {
-			return false;
-		}
+		return $router;
 	}
 
 	/**

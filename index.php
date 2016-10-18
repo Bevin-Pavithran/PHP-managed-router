@@ -44,7 +44,7 @@ $routers = $api->search();
           <tfoot>
             <tr>
               <td>
-                <input type="text" class="form-control" id="customer" placeholder="Name">
+                <input type="text" class="form-control" id="name" placeholder="Name">
               </td>
               <td>
                 <input type="text" class="form-control" id="serial" placeholder="Serial Number RNV...">
@@ -78,20 +78,32 @@ $(document).ready(function () {
       getRouter();
     });
     $('#addRouter').on('click', function(e){
-      var customer = $('#customer').val();
+      var name = $('#name').val();
       var serial = $('#serial').val();
       var mac = $('#mac').val();
-      
       $.ajax({
         method: "POST",
         url: "ajax/addNewRouter.php",
         data: {
-          customer : customer,
+          name : name,
           serial : serial,
           mac : mac
         },
-        success: function() {
-          
+        success: function(resultStr) {
+          var result = jQuery.parseJSON(resultStr);
+          if(result.error){
+            $.bootstrapGrowl(result.error, {
+            type: 'danger',
+            align: 'right',
+            width: 'auto'
+            });   
+          } else {
+            $.bootstrapGrowl("Router Added", {
+            type: 'success',
+            align: 'right',
+            width: 'auto'
+            });  
+          }
         }
       });
     });
