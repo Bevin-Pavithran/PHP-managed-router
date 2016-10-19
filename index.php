@@ -5,6 +5,9 @@ include('include/standard.php');
 include('include/header.php');
 $api = new ManagedRouterAPI(API_URL, API_USER, API_PASS);
 $routers = $api->search();
+echo "<pre>";
+var_dump($routers);
+echo "</pre>";
 ?>
  <div class="container-fluid">
     <div class="row">
@@ -92,7 +95,7 @@ $(document).ready(function () {
         success: function(resultStr) {
           var result = jQuery.parseJSON(resultStr);
           if(result.error){
-            $.bootstrapGrowl(result.error, {
+            $.bootstrapGrowl(result.reason, {
             type: 'danger',
             align: 'right',
             width: 'auto'
@@ -102,7 +105,8 @@ $(document).ready(function () {
             type: 'success',
             align: 'right',
             width: 'auto'
-            });  
+            });
+            getRouter();
           }
         }
       });
