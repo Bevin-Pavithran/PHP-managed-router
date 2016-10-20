@@ -5,9 +5,6 @@ include('include/standard.php');
 include('include/header.php');
 $api = new ManagedRouterAPI(API_URL, API_USER, API_PASS);
 $routers = $api->search();
-echo "<pre>";
-var_dump($routers);
-echo "</pre>";
 ?>
  <div class="container-fluid">
     <div class="row">
@@ -34,13 +31,13 @@ echo "</pre>";
             <?php
             foreach ($routers as $router) {
             $line = '<tr style="height: 55px;">';
-            $line .= "<td>".$router->name."</td>";
-            $line .= "<td>".$router->serial."</td>";
-            $line .= "<td>".$router->mac."</td>";
-            $line .= "<td>".$router->make."</td>";
-            $line .= "<td>$router->model</td>";
+            $line .= '<td id="name"onclick="changeToInput('.$router->id.',\''.$router->name.'\',\'Name\');">'.$router->name.'</td>';
+            $line .= '<td onclick="changeToInput('.$router->id.',\''.$router->serial.'\',\'Serial Number\');">'.$router->serial.'</td>';
+            $line .= '<td onclick="changeToInput('.$router->id.',\''.$router->mac.'\',\'MAC\');">'.$router->mac.'</td>';
+            $line .= '<td>'.$router->make.'</td>';
+            $line .= '<td>'.$router->model.'</td>';
             $line .= "<td><a class='btn btn-default btn-sm addtomodal' href='".$router->url."' target='_blank'>View Router</a></td>";
-            $line .= "</tr>";
+            $line .= '</tr>';
             echo $line;
             } ?>
           </tbody>
@@ -65,6 +62,39 @@ echo "</pre>";
         </table>    
       </div>
     </div>    
+  </div>
+  <!-- Modal for Edit-->
+  <!-- Modal -->
+  <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <button type="button" class="close" 
+                  data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+          <h4 class="modal-title" id="modalTitle">
+            Edit Field
+          </h4>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="modal-body">
+          <form role="form">
+            <div class="form-group" id='editField'>
+            </div>
+          </form>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id='saveChanges'>Save changes</button>
+        </div>
+      </div>
+    </div>
   </div>
 <script>
 $(document).ready(function () {
@@ -111,6 +141,14 @@ $(document).ready(function () {
         }
       });
     });
+    
+    $('#saveChanges').on('click',function() {
+      var editElement = $('#element').html();
+      var routerId = $('#routerId').val();
+      var newValue = $('#newValue').val();
+      
+      alert(editElement+" "+routerId+" "+newValue);
+    });
 });
 
 function getRouter(param){
@@ -125,6 +163,13 @@ function getRouter(param){
       $('#routerList').html(searchResult);     
     }
   });
+}
+
+function changeToInput(id, value,element){
+  $('#editField').html('<label for="editedItem" id="element">'+element+'</label>');
+  $('#editField').append('<input type="text" class="form-control" id="newValue" value="'+value+'"/>');
+  $('#editField').append('<input type="hidden" class="form-control" id="routerId" value="'+id+'"/>');
+  $('#EditModal').modal('show');
 }
 </script>
 <?php include('include/footer.php');?>
