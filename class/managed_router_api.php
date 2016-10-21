@@ -199,11 +199,7 @@ class ManagedRouterAPI {
 
 		$router = json_decode($result_string);
 		
-		if(is_object($router)){
-			return $router;
-		} else {
-			return false;
-		}
+		return $router;
 	}
 
 	/**
@@ -222,11 +218,8 @@ class ManagedRouterAPI {
 		$result_string = $this->startCurl($this->delete_url,$params);
 		
 		$status = json_decode($result_string);
-		if(is_array($status)){
-			return $status;
-		}else {
-			return false;
-		}
+                return $status;
+                
 	}
 
 	/**
