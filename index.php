@@ -31,12 +31,15 @@ $routers = $api->search();
             <?php
             foreach ($routers as $router) {
             $line = '<tr style="height: 55px;">';
-            $line .= '<td id="name"onclick="changeToInput('.$router->id.',\''.$router->name.'\',\'Name\');">'.$router->name.'</td>';
+            $line .= '<td id="name"onclick="changeToInput('.$router->id.',\''.$router->name.'\',\'Name\',\''.$router->serial.'\');" style="cursor: pointer;">'.$router->name.'</td>';
             $line .= '<td>'.$router->serial.'</td>';
-            $line .= '<td onclick="changeToInput('.$router->id.',\''.$router->mac.'\',\'MAC\','.$router->serial.');">'.$router->mac.'</td>';
+            $line .= '<td onclick="changeToInput('.$router->id.',\''.$router->mac.'\',\'MAC\',\''.$router->serial.'\'); "style="cursor: pointer;">'.$router->mac.'</td>';
             $line .= '<td>'.$router->make.'</td>';
             $line .= '<td>'.$router->model.'</td>';
-            $line .= "<td><a class='btn btn-default btn-sm addtomodal' href='".$router->url."' target='_blank'>View Router</a></td>";
+            $line .= '<td>';
+            $line .= "<a class='btn btn-default btn-sm addtomodal' href='".$router->url."' target='_blank'>View Router</a>";
+            $line .= '<a href="#" class="removeRouter btn btn-default btn-xs pull-right" onclick="deleteRouter('.$router->id.',\''.$router->serial.'\')" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-times"></i></a>';
+            $line .= '</td>';
             $line .= '</tr>';
             echo $line;
             } ?>
@@ -180,6 +183,14 @@ $(document).ready(function () {
         $('#EditModal').modal('hide');
       } 
     });
+    
+    
+    $('.addtomodal').loadInModal(function(){
+      $('#iframeinmodal').on('load',function () {
+        $('#siteloader-content').hide();
+      });
+    });
+    
 });
 
 function getRouter(param){

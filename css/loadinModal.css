@@ -1,0 +1,26 @@
+.dialog-iframe-modal {
+  width: 100%;
+  max-width: 1300px;
+  height: 90%;
+  margin: auto;
+}
+
+.container-iframe-modal {
+  padding: 15px;
+}
+
+.content-iframe-modal {
+  height: auto;
+  min-height: 90%;
+  border-radius: 0;
+  max-width: 1300px;
+}
+
+#siteloader-content{
+  width: 32%;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 15%;
+}
+
+ 
