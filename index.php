@@ -38,7 +38,7 @@ $routers = $api->search();
             $line .= '<td>'.$router->model.'</td>';
             $line .= '<td>';
             $line .= "<a class='btn btn-default btn-sm addtomodal' href='".$router->url."' target='_blank'>View Router</a>";
-            $line .= '<a href="#" class="removeRouter btn btn-default btn-xs pull-right" onclick="deleteRouter('.$router->id.',\''.$router->serial.'\')" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-times"></i></a>';
+            $line .= '<a href="#" class="removeRouter btn btn-default btn-xs pull-right" onclick="deleteRouter('.$router->id.',\''.$router->serial.'\')"><i class="fa fa-times"></i></a>';
             $line .= '</td>';
             $line .= '</tr>';
             echo $line;
@@ -97,7 +97,24 @@ $routers = $api->search();
         </div>
       </div>
     </div>
-  </div>
+  </div> 
+  <!-- End of Modal -->
+  <!-- Delete Confirm Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Body -->
+        <div class="modal-body" id="deleteModalBody">
+          Delete Router. Are you sure?
+        </div>
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id='confirmDelete'>Delete</button>
+        </div>
+      </div>
+    </div>
+  </div> <!-- End of Delete Modal -->
 <script>
 $(document).ready(function () {
     $(".nav li").removeClass("active");
@@ -112,6 +129,8 @@ $(document).ready(function () {
       e.preventDefault();
       getRouter();
     });
+    
+    //Add Router
     $('#routerList').on('click','#addRouter', function(e){
       var name = $('#name').val();
       var serial = $('#serial').val();
@@ -144,6 +163,7 @@ $(document).ready(function () {
       });
     });
     
+    //Edit Router
     $('#saveChanges').on('click',function() {
       var editElement = $('#element').html();
       var routerId = $('#routerId').val();
@@ -184,15 +204,53 @@ $(document).ready(function () {
       } 
     });
     
-    
+    //View Router
     $('.addtomodal').loadInModal(function(){
       $('#iframeinmodal').on('load',function () {
         $('#siteloader-content').hide();
       });
     });
     
+    //Delete Router
+    $('#confirmDelete').on('click', function() {
+      var routerId = $('#delrouterId').val();
+      var serial = $('#delserial').val();
+      var restoreBtn = '<a href="#" class="restoreRouter btn btn-warning btn-xs pull-right"><i class="fa fa-undo"></i></a>';
+      $.ajax({
+        method: "POST",
+        url: "ajax/deleteRouter.php",
+        data: {
+          id: routerId,
+          serial: serial
+        }, 
+        success: function(result) {
+          if(result.error) {
+            $.bootstrapGrowl(result.reason, {
+              type: 'danger',
+              align: 'right',
+              width: 'auto'
+            });
+            $('#deleteModal').modal('hide');
+          } else {
+            $.bootstrapGrowl("Router Deleted", {
+              type: 'success',
+              align: 'right',
+              width: 'auto'
+            }); 
+            $('table tr').filter(":contains("+serial+")").find('td').css('text-decoration','line-through');
+            //$('table tr').filter(":contains("+serial+")").find('td').eq(5).text(restoreBtn);
+          }  
+        }
+      });
+    });
 });
 
+function deleteRouter(routerId, serial) {
+  $('#deleteModalBody').append('<input type="hidden" class="form-control" id="delrouterId" value="'+routerId+'"/>');
+  $('#deleteModalBody').append('<input type="hidden" class="form-control" id="delserial" value="'+serial+'"/>');
+  $('#deleteModal').modal('show');
+}
+    
 function getRouter(param){
   $.ajax({
     method: "POST",
