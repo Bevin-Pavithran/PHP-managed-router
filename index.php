@@ -215,13 +215,14 @@ $(document).ready(function () {
     $('#confirmDelete').on('click', function() {
       var routerId = $('#delrouterId').val();
       var serial = $('#delserial').val();
-      var restoreBtn = '<a href="#" class="restoreRouter btn btn-warning btn-xs pull-right"><i class="fa fa-undo"></i></a>';
+      var restoreBtn = '<a href="#" class="restoreRouter btn btn-warning btn-xs pull-right" onclick="restoreRouter('+routerId+',\''+serial+'\')"><i class="fa fa-undo"></i></a>';
       $.ajax({
         method: "POST",
         url: "ajax/deleteRouter.php",
         data: {
           id: routerId,
-          serial: serial
+          serial: serial,
+          action: 'delete'
         }, 
         success: function(result) {
           if(result.error) {
@@ -238,7 +239,8 @@ $(document).ready(function () {
               width: 'auto'
             }); 
             $('table tr').filter(":contains("+serial+")").find('td').css('text-decoration','line-through');
-            //$('table tr').filter(":contains("+serial+")").find('td').eq(5).text(restoreBtn);
+            $('table tr').filter(":contains("+serial+")").find('td').eq(5).html(restoreBtn);
+            $('#deleteModal').modal('hide');
           }  
         }
       });
@@ -249,6 +251,34 @@ function deleteRouter(routerId, serial) {
   $('#deleteModalBody').append('<input type="hidden" class="form-control" id="delrouterId" value="'+routerId+'"/>');
   $('#deleteModalBody').append('<input type="hidden" class="form-control" id="delserial" value="'+serial+'"/>');
   $('#deleteModal').modal('show');
+}
+
+function restoreRouter(routerId, serial) {
+  $.ajax({
+    method: "POST",
+    url: "ajax/deleteRouter.php",
+    data: {
+      id: routerId,
+      serial: serial,
+      action: 'restore'
+    }, 
+    success: function(result) {
+      if(result.error) {
+        $.bootstrapGrowl(result.reason, {
+          type: 'danger',
+          align: 'right',
+          width: 'auto'
+        });
+      } else {
+        $.bootstrapGrowl("Router Restored", {
+          type: 'success',
+          align: 'right',
+          width: 'auto'
+        });
+        getRouter();
+      }
+    }
+  });    
 }
     
 function getRouter(param){
