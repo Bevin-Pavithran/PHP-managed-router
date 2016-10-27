@@ -38,7 +38,7 @@ $routers = $api->search();
             $line .= '<td>'.$router->model.'</td>';
             $line .= '<td>';
             $line .= "<a class='btn btn-default btn-sm addtomodal' href='".$router->url."' target='_blank'>View Router</a>";
-            $line .= '<a href="#" class="removeRouter btn btn-default btn-xs pull-right" onclick="deleteRouter('.$router->id.',\''.$router->serial.'\')"><i class="fa fa-times"></i></a>';
+            $line .= '<button class="removeRouter btn btn-default btn-xs pull-right" onclick="deleteRouter('.$router->id.',\''.$router->serial.'\')"><i class="fa fa-times"></i></button>';
             $line .= '</td>';
             $line .= '</tr>';
             echo $line;
@@ -93,7 +93,7 @@ $routers = $api->search();
         <!-- Modal Footer -->
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id='saveChanges'>Save changes</button>
+          <button type="button" class="btn btn-primary" data-size="s" data-style="zoom-in" id='saveChanges'>Save changes</button>
         </div>
       </div>
     </div>
@@ -110,7 +110,7 @@ $routers = $api->search();
         <!-- Modal Footer -->
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" id='confirmDelete'>Delete</button>
+          <button type="button" class="btn btn-primary" id='confirmDelete' data-size="s" data-style="zoom-in">Delete</button>
         </div>
       </div>
     </div>
@@ -165,6 +165,8 @@ $(document).ready(function () {
     
     //Edit Router
     $('#saveChanges').on('click',function() {
+      var l = Ladda.create(this);
+      l.start();
       var editElement = $('#element').html();
       var routerId = $('#routerId').val();
       var serial = $('#serial').val();
@@ -182,6 +184,7 @@ $(document).ready(function () {
           },
           success: function(result){
             if(result.error){
+              l.stop();
               $.bootstrapGrowl(result.reason, {
                 type: 'danger',
                 align: 'right',
@@ -189,6 +192,7 @@ $(document).ready(function () {
               });
               $('#EditModal').modal('hide');
             } else {
+              l.stop();
               $.bootstrapGrowl("Updated", {
                 type: 'success',
                 align: 'right',
@@ -200,6 +204,7 @@ $(document).ready(function () {
           }
         });
       } else {
+        l.stop();
         $('#EditModal').modal('hide');
       } 
     });
@@ -213,6 +218,8 @@ $(document).ready(function () {
     
     //Delete Router
     $('#confirmDelete').on('click', function() {
+      var l = Ladda.create(this);
+      l.start();
       var routerId = $('#delrouterId').val();
       var serial = $('#delserial').val();
       var restoreBtn = '<a href="#" class="restoreRouter btn btn-warning btn-xs pull-right" onclick="restoreRouter('+routerId+',\''+serial+'\')"><i class="fa fa-undo"></i></a>';
@@ -225,14 +232,16 @@ $(document).ready(function () {
           action: 'delete'
         }, 
         success: function(result) {
+          l.stop();
           if(result.error) {
+            $('#deleteModal').modal('hide');
             $.bootstrapGrowl(result.reason, {
               type: 'danger',
               align: 'right',
               width: 'auto'
             });
-            $('#deleteModal').modal('hide');
           } else {
+            $('#deleteModal').modal('hide');
             $.bootstrapGrowl("Router Deleted", {
               type: 'success',
               align: 'right',
@@ -240,7 +249,6 @@ $(document).ready(function () {
             }); 
             $('table tr').filter(":contains("+serial+")").find('td').css('text-decoration','line-through');
             $('table tr').filter(":contains("+serial+")").find('td').eq(5).html(restoreBtn);
-            $('#deleteModal').modal('hide');
           }  
         }
       });

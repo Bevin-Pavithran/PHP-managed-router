@@ -19,7 +19,7 @@ $routers = $api->search($_POST['param']);
     $line .= '<td>'.$router->model.'</td>';
     $line .= '<td>';
     $line .= "<a class='btn btn-default btn-sm addtomodal' href='".$router->url."' target='_blank'>View Router</a>";
-    $line .= '<a href="#" class="removeRouter btn btn-default btn-xs pull-right" onclick="deleteRouter('.$router->id.',\''.$router->serial.'\')"><i class="fa fa-times"></i></a>';
+    $line .= '<button class="removeRouter btn btn-default btn-xs pull-right" onclick="deleteRouter('.$router->id.',\''.$router->serial.'\')"><i class="fa fa-times"></i></button>';
     $line .= '</td>';
     $line .= '</tr>';
     echo $line;
