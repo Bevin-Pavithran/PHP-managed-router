@@ -104,13 +104,14 @@ $routers = $api->search();
     <div class="modal-dialog">
       <div class="modal-content">
         <!-- Modal Body -->
-        <div class="modal-body" id="deleteModalBody">
+        <div class="modal-body">
           Delete Router. Are you sure?
+          <div id="deleteModalData"></div>
         </div>
         <!-- Modal Footer -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" id='confirmDelete' data-size="s" data-style="zoom-in">Delete</button>
+          <button type="button" class="ladda-button" data-size="s" data-dismiss="modal"><span class="ladda-label">Cancel</span></button>
+          <button type="button" class="ladda-button" id='confirmDelete' data-color="blue" data-size="s" data-style="zoom-in"><span class="ladda-label">Delete</span><span class="ladda-spinner"></span></button>
         </div>
       </div>
     </div>
@@ -256,8 +257,8 @@ $(document).ready(function () {
 });
 
 function deleteRouter(routerId, serial) {
-  $('#deleteModalBody').append('<input type="hidden" class="form-control" id="delrouterId" value="'+routerId+'"/>');
-  $('#deleteModalBody').append('<input type="hidden" class="form-control" id="delserial" value="'+serial+'"/>');
+  $('#deleteModalData').html('<input type="hidden" class="form-control" id="delrouterId" value="'+routerId+'"/>');
+  $('#deleteModalData').append('<input type="hidden" class="form-control" id="delserial" value="'+serial+'"/>');
   $('#deleteModal').modal('show');
 }
 
